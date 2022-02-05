@@ -1,6 +1,12 @@
 package support;
 
+import static support.DriverFactory.getDriver;
+import static support.DriverFactory.getProp;
+import static support.DriverFactory.killDriver;
+import static utils.Generator.dataHoraParaArquivo;
+
 import java.io.File;
+import java.io.IOException;
 
 import org.junit.After;
 import org.junit.Before;
@@ -8,7 +14,6 @@ import org.junit.Rule;
 import org.junit.rules.TestName;
 
 import pages.LoginPage;
-import utils.Generator;
 import utils.Screnshot;
 
 public class BaseTest {
@@ -30,13 +35,15 @@ public class BaseTest {
 	@After
 	public void finaliza() {
 		String arquivoPrint = "target" + File.separator + "print" + File.separator + testName.getMethodName()
-				+ Generator.dataHoraParaArquivo() + ".png";
-		Screnshot.tirar(DriverFactory.getDriver(), arquivoPrint);
-
-		if (Propriedades.FECHAR_BROWSER) {
-			DriverFactory.killDriver();
+				+ dataHoraParaArquivo() + ".png";
+		Screnshot.tirar(getDriver(), arquivoPrint);
+		try {
+			if (getProp().getProperty("prop.fecharBrowser").equalsIgnoreCase("sim")) {
+				killDriver();
+			}
+		} catch (IOException e) {
+			e.printStackTrace();
 		}
-
 	}
 
 }
