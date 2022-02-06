@@ -16,21 +16,31 @@ import org.openqa.selenium.remote.DesiredCapabilities;
 import org.openqa.selenium.remote.RemoteWebDriver;
 
 public class DriverFactory {
-
+	
+	/**
+	 * @author Nilton L. Correia 
+	 * Método para inicializar o driver
+	 */
 	public static ThreadLocal<WebDriver> threadDriver = new ThreadLocal<WebDriver>() {
 		@Override
 		protected synchronized WebDriver initialValue() {
 			return initDriver();
 		}
 	};
-
-	private DriverFactory() {
-	}
-
+	
+	/**
+	 * @author Nilton L. Correia 
+	 * Método para obter o driver
+	 */
 	public static WebDriver getDriver() {
 		return threadDriver.get();
 	}
-
+	
+	/**
+	 * @author Nilton L. Correia 
+	 * Método que entra no driver, com base nos parâmetros
+	 *         do arquivo .properties
+	 */
 	public static WebDriver initDriver() {
 		WebDriver driver = null;
 		try {
@@ -66,8 +76,8 @@ public class DriverFactory {
 					cap = DesiredCapabilities.chrome();
 				}
 				try {
-					driver = new RemoteWebDriver(new URL("http://192.168.0.104:40238/wd/hub"), cap);
-					driver = new RemoteWebDriver(new URL("http://192.168.0.104:5556/wd/hub"), cap);
+					driver = new RemoteWebDriver(new URL(""), cap);
+					driver = new RemoteWebDriver(new URL(""), cap);
 				} catch (MalformedURLException e) {
 					System.err.println("Falha na conexão com o GRID");
 					e.printStackTrace();
@@ -87,9 +97,7 @@ public class DriverFactory {
 					cap = DesiredCapabilities.chrome();
 				}
 				try {
-					driver = new RemoteWebDriver(new URL(
-							"https://Niltinho:37559398-d9cf-4ed4-ad5b-e29977d410c0@ondemand.saucelabs.com:443/wd/hub"),
-							cap);
+					driver = new RemoteWebDriver(new URL(""), cap);
 				} catch (MalformedURLException e) {
 					e.printStackTrace();
 				}
@@ -102,7 +110,11 @@ public class DriverFactory {
 		driver.manage().window().maximize();
 		return driver;
 	}
-
+	
+	/**
+	 * @author Nilton L. Correia 
+	 * Método para obter os parâmetros setados no arquivo .properties
+	 */
 	public static Properties getProp() throws IOException {
 		Properties props = new Properties();
 		FileInputStream file = new FileInputStream(
@@ -110,7 +122,11 @@ public class DriverFactory {
 		props.load(file);
 		return props;
 	}
-
+	
+	/**
+	 * @author Nilton L. Correia 
+	 * Método que finaliza o driver
+	 */
 	public static void killDriver() {
 		WebDriver driver = getDriver();
 		if (driver != null) {

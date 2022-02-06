@@ -1,5 +1,10 @@
 package support;
 
+import static org.openqa.selenium.support.ui.ExpectedConditions.invisibilityOfElementLocated;
+import static org.openqa.selenium.support.ui.ExpectedConditions.visibilityOfElementLocated;
+import static support.DriverFactory.getDriver;
+import static utils.Log.info;
+
 import java.util.List;
 
 import org.openqa.selenium.Alert;
@@ -8,135 +13,186 @@ import org.openqa.selenium.JavascriptExecutor;
 import org.openqa.selenium.Keys;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.interactions.Actions;
-import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.Select;
 import org.openqa.selenium.support.ui.WebDriverWait;
 
 public class BasePage {
 
+	/**
+	 * @author Nilton L. Correia 
+	 * Método que escreve no campo de texto
+	 */
 	public void escreverCampo(By by, String texto) {
-//		limparCampo(by);
-		DriverFactory.getDriver().findElement(by).sendKeys(texto);
+		getDriver().findElement(by).sendKeys(texto);
+		info(texto + " escrito com sucesso");
 	}
 
+	/**
+	 * @author Nilton L. Correia 
+	 * Método que limpa o campo de texto
+	 */
 	public void limparCampo(By by) {
-		DriverFactory.getDriver().findElement(by).clear();
+		getDriver().findElement(by).clear();
+		info("Campo limpo com sucesso");
 	}
 
+	/**
+	 * @author Nilton L. Correia 
+	 * Método que escreve e confirma no campo de texto
+	 */
 	public void confirmarCampo(By by) {
-		DriverFactory.getDriver().findElement(by).sendKeys(Keys.ENTER);
-		;
+		getDriver().findElement(by).sendKeys(Keys.ENTER);
+		info("Campo escrito com sucesso");
 	}
 
+	/**
+	 * @author Nilton L. Correia 
+	 * Método que obtém o texto do elemento
+	 */
 	public String obterValorCampo(By by) {
-		return DriverFactory.getDriver().findElement(by).getText();
+		return getDriver().findElement(by).getText();
 	}
 
-	public String validarCampo(By by) {
-		return DriverFactory.getDriver().findElement(by).getText();
+	/**
+	 * @author Nilton L. Correia 
+	 * Método que verifica se o campo está habilitado
+	 */
+	public boolean validarCampoHabilitado(String valor) {
+		return getDriver().findElement(By.xpath(valor)).isEnabled();
 	}
 
-	public boolean validarCampoHabilitado(String validaCampo) {
-		return DriverFactory.getDriver().findElement(By.xpath(validaCampo)).isEnabled();
+	/**
+	 * @author Nilton L. Correia 
+	 * Método que escreve num campo via Action
+	 */
+	public void escreverCampoAction(By by, String texto) {
+		Actions act = new Actions(getDriver());
+		WebElement escreverCampo = getDriver().findElement(by);
+		act.sendKeys(escreverCampo, texto).perform();
+		info(texto + " escrito com sucesso");
 	}
 
-	public void escreverCampoAction(By by, String valor) {
-		Actions act = new Actions(DriverFactory.getDriver());
-		WebElement escreverCampo = DriverFactory.getDriver().findElement(by);
-		act.sendKeys(escreverCampo, valor).perform();
-	}
-
+	/**
+	 * @author Nilton L. Correia 
+	 * Método que limpa o campo de texto via Action
+	 */
 	public void apagarCampoAction(By by) {
-		Actions act = new Actions(DriverFactory.getDriver());
-		WebElement apagarCampo = DriverFactory.getDriver().findElement(by);
+		Actions act = new Actions(getDriver());
+		WebElement apagarCampo = getDriver().findElement(by);
 		act.sendKeys(apagarCampo, "").perform();
+		info("Campo limpo com sucesso");
+
 	}
 
+	/**
+	 * @author Nilton L. Correia 
+	 * Método que escreve e confirma num campo de texto,
+	 *         via Action
+	 */
 	public void confirmarCampoAction(By by) {
-		Actions act = new Actions(DriverFactory.getDriver());
-		WebElement escreverCampo = DriverFactory.getDriver().findElement(by);
+		Actions act = new Actions(getDriver());
+		WebElement escreverCampo = getDriver().findElement(by);
 		act.sendKeys(escreverCampo, Keys.ENTER).perform();
+		info("Campo escrito com sucesso");
 	}
 
-	public boolean validarRadio(By by) {
-		return DriverFactory.getDriver().findElement(by).isSelected();
+	/**
+	 * @author Nilton L. Correia 
+	 * Método que verifica se o elemento está selecionado
+	 */
+	public boolean validarElementoSelecionado(By by) {
+		return getDriver().findElement(by).isSelected();
 	}
 
-	public void selecionarRadio(By by) {
-		DriverFactory.getDriver().findElement(by).click();
+	/**
+	 * @author Nilton L. Correia 
+	 * Método que clica no elemento
+	 */
+	public void clicar(By by) {
+		getDriver().findElement(by).click();
+		info("Clique no elemento com sucesso");
 	}
 
-	public boolean validarCheckbox(By by) {
-		return DriverFactory.getDriver().findElement(by).isSelected();
-	}
-
-	public void selecionarCheckbox(By by) {
-		DriverFactory.getDriver().findElement(by).click();
-	}
-
-	public void clicarBotao(By by) {
-		DriverFactory.getDriver().findElement(by).click();
-	}
-
-	public void clicarBotao(String id_botao) {
-		clicarBotao(By.id(id_botao));
-		;
-	}
-
-	public void clicarBotaoAction(By by) {
-		Actions act = new Actions(DriverFactory.getDriver());
-		WebElement clique = DriverFactory.getDriver().findElement(by);
+	/**
+	 * @author Nilton L. Correia 
+	 * Método que clica no elemento, via Action
+	 */
+	public void clicarAction(By by) {
+		Actions act = new Actions(getDriver());
+		WebElement clique = getDriver().findElement(by);
 		act.click(clique).perform();
+		info("Clique no elemento com sucesso");
 	}
 
-	public void clicarLink(By by) {
-		DriverFactory.getDriver().findElement(by).click();
-	}
-
-	public void clicarMenu(By by) {
-		DriverFactory.getDriver().findElement(by).click();
-	}
-
+	/**
+	 * @author Nilton L. Correia 
+	 * Método que troca a janela do browser
+	 */
 	public void trocarJanela(By by) {
-		WebElement fr = DriverFactory.getDriver().findElement(by);
-		DriverFactory.getDriver().switchTo().frame(fr);
+		WebElement fr = getDriver().findElement(by);
+		getDriver().switchTo().frame(fr);
+		info("Troca de janela do browser executado com sucesso");
 	}
 
-	public void trocarJanela2(By by) {
-		WebElement fr = DriverFactory.getDriver().findElement(by);
-		DriverFactory.getDriver().switchTo().frame(fr);
-	}
-
+	/**
+	 * @author Nilton L. Correia 
+	 * Método que faz o scroll na tela
+	 */
 	public void descerJanela() {
-		JavascriptExecutor jse = (JavascriptExecutor) DriverFactory.getDriver();
+		JavascriptExecutor jse = (JavascriptExecutor) getDriver();
 		jse.executeScript("scrollBy(0,500)", "");
+		info("Realizado scroll com sucesso");
 	}
 
+	/**
+	 * @author Nilton L. Correia 
+	 * Método que aguarda o elemento aparecer
+	 */
 	public void esperarElementoAparecer(By by) {
-		WebDriverWait wait = new WebDriverWait(DriverFactory.getDriver(), 30);
-		wait.until(ExpectedConditions.visibilityOfElementLocated(by));
+		WebDriverWait wait = new WebDriverWait(getDriver(), 30);
+		wait.until(visibilityOfElementLocated(by));
+		info("Elemento apareceu desapareceu com sucesso");
 	}
 
+	/**
+	 * @author Nilton L. Correia 
+	 * Método que aguarda o elemento desaparecer
+	 */
 	public void esperarElementoDesaparecer(By by) {
-		WebDriverWait wait = new WebDriverWait(DriverFactory.getDriver(), 30);
-		wait.until(ExpectedConditions.invisibilityOfElementLocated(by));
+		WebDriverWait wait = new WebDriverWait(getDriver(), 30);
+		wait.until(invisibilityOfElementLocated(by));
+		info("Elemento desapareceu desapareceu com sucesso");
 	}
 
+	/**
+	 * @author Nilton L. Correia 
+	 * Método que clica no elemento do combo
+	 */
 	public void selecionarCombo(By by, String valor) {
-		WebElement element = DriverFactory.getDriver().findElement(by);
+		WebElement element = getDriver().findElement(by);
 		Select combo = new Select(element);
 		combo.selectByVisibleText(valor);
+		info(valor + " selecionado com sucesso");
 	}
 
+	/**
+	 * @author Nilton L. Correia 
+	 * Método que obtém o elemento do combo
+	 */
 	public void obterValorCombo(By by) {
-		WebElement element = DriverFactory.getDriver().findElement(by);
+		WebElement element = getDriver().findElement(by);
 		Select combo = new Select(element);
 		combo.getFirstSelectedOption().getText();
+		info("Elemento obtido com sucesso " + combo.getFirstSelectedOption().getText());
 	}
 
+	/**
+	 * @author Nilton L. Correia 
+	 * Método que obtém o elementos de uma celula
+	 */
 	public WebElement obterCelula(String colunaBusca, String valor, String colunaBotao, String idTabela) {
 		// procurar coluna do registro
-		WebElement tabela = DriverFactory.getDriver().findElement(By.xpath("//*[@id='" + idTabela + "']"));
+		WebElement tabela = getDriver().findElement(By.xpath("//*[@id='" + idTabela + "']"));
 		int idColuna = obterIndiceColuna(colunaBusca, tabela);
 
 		// encontrar a linha do registro
@@ -150,12 +206,20 @@ public class BasePage {
 		return celula;
 	}
 
+	/**
+	 * @author Nilton L. Correia 
+	 * Método que clica no elemento da tabela
+	 */
 	public void clicarBotaoTabela(String colunaBusca, String valor, String colunaBotao, String idTabela) {
 		WebElement celula = obterCelula(colunaBusca, valor, colunaBotao, idTabela);
 		celula.findElement(By.xpath(".//input")).click();
-
+		info("Clique executado com sucesso");
 	}
 
+	/**
+	 * @author Nilton L. Correia 
+	 * Método que obtém o índice da linha da tabela
+	 */
 	protected int obterIndiceLinha(String valor, WebElement tabela, int idColuna) {
 		List<WebElement> linhas = tabela.findElements(By.xpath("./tbody/tr/td[" + idColuna + "]"));
 		int idLinha = -1;
@@ -168,6 +232,10 @@ public class BasePage {
 		return idLinha;
 	}
 
+	/**
+	 * @author Nilton L. Correia 
+	 * Método que obtém o índice da coluna da tabela
+	 */
 	protected int obterIndiceColuna(String coluna, WebElement tabela) {
 		List<WebElement> colunas = tabela.findElements(By.xpath(".//th"));
 		int idColuna = -1;
@@ -180,22 +248,34 @@ public class BasePage {
 		return idColuna;
 	}
 
+	/**
+	 * @author Nilton L. Correia 
+	 * Método que confirma o alerta na tela
+	 */
 	public void alertaAceitar() {
-		Alert alert = DriverFactory.getDriver().switchTo().alert();
+		Alert alert = getDriver().switchTo().alert();
 		alert.accept();
+		info("Alerta aceito com sucesso");
 	}
 
+	/**
+	 * @author Nilton L. Correia 
+	 * Método que obtém o texto que apresenta no alerta
+	 */
 	public String alertaObterTexto() {
-		Alert alert = DriverFactory.getDriver().switchTo().alert();
+		Alert alert = getDriver().switchTo().alert();
 		return alert.getText();
 	}
 
+	/**
+	 * @author Nilton L. Correia 
+	 * Método que obtém o texto que apresenta no alerta e confirma
+	 */
 	public String alertaObterTextoEAceitar() {
-		Alert alert = DriverFactory.getDriver().switchTo().alert();
+		Alert alert = getDriver().switchTo().alert();
 		String valor = alert.getText();
 		alert.accept();
 		return valor;
-
 	}
 
 }
